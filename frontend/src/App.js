@@ -29,12 +29,16 @@ import NewEventPage from "./pages/NewEvent";
 import EditEventPage from "./pages/EditEvent";
 import EventsRoot from "./pages/EventsRoot";
 import EventsPage from "./pages/Events";
+import ErrorPage from "./pages/Error";
+import { loader as eventsLoader } from "./pages/Events";
+import { loader as eventDetailLoader } from "./pages/EventDetail";
 
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <RootLayout />,
+    errorElement: <ErrorPage />,
     children: [
       { index: true, element: <HomePage /> },
       {
@@ -42,18 +46,10 @@ const router = createBrowserRouter([
         element: <EventsRoot />,
         children: [
           {
-            index: true, element: <EventsPage />, loader: async() => {
-              const response = await fetch('http://localhost:8080/events');
-
-              if (!response.ok) {
-                /// error
-              } else {
-                const resData = await response.json();
-                return resData.events;
-              }
-            }
+            index: true, element: <EventsPage />,
+            loader: eventsLoader,
           },
-          { path: ':id', element: <EventDetailPage /> },
+          { path: ':id', element: <EventDetailPage />, loader: eventDetailLoader },
           { path: 'new', element: <NewEventPage /> },
           { path: ':id/edit', element: <EditEventPage /> }
         ]
