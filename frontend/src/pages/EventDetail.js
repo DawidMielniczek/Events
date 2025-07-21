@@ -1,10 +1,13 @@
 import { redirect, useLoaderData } from "react-router-dom";
 import EventItem from '../components/EventItem';
+import EventsList from "../components/EventsList";
 
 export default function EventDetailPage() {
     const data = useLoaderData();
 
-    return <EventItem event={data.event} />
+    return <><EventItem event={data.event} />
+        <EventsList events={data.event} />
+    </>
 }
 
 export async function loader({ request, params }) {
@@ -22,7 +25,7 @@ export async function loader({ request, params }) {
 
 export async function action({ params, request }) {
     const eventId = params.id;
-    const response = await fetch('http://localhost:8080/events/' + eventId,{
+    const response = await fetch('http://localhost:8080/events/' + eventId, {
         method: request.method,
     });
 
